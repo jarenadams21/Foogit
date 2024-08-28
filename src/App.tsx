@@ -37,6 +37,7 @@ interface AnimationData {
   layers: Layer[];
 }
 
+// Configuration parameters for the Pong game, allowing adjustment of canvas size, paddle size, ball size, and speeds.
 interface GameConfig {
   canvasWidth: number;
   canvasHeight: number;
@@ -64,6 +65,7 @@ enum GameState {
   GameOver,
 }
 
+// PongGame class handles the game logic, rendering, and event listeners for the Pong game.
 class PongGame {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
@@ -86,11 +88,13 @@ class PongGame {
     this.initEventListeners();
   }
 
+  // Initializes key event listeners for player controls and mouse movement for paddle control.
   private initEventListeners() {
     window.addEventListener('keydown', this.handleKeyDown.bind(this));
     this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
   }
 
+  // Handles keydown events for controlling paddle1 (up and down arrow keys).
   private handleKeyDown(event: KeyboardEvent) {
     switch (event.key) {
       case 'ArrowUp':
@@ -107,6 +111,7 @@ class PongGame {
     }
   }
 
+  // Handles mouse movement to control paddle2 position based on mouse Y position.
   private handleMouseMove(event: MouseEvent) {
     const rect = this.canvas.getBoundingClientRect();
     const mouseY = event.clientY - rect.top;
@@ -116,6 +121,7 @@ class PongGame {
     );
   }
 
+  // Updates the game state, including ball position, collision detection, and game over conditions.
   private updateGame() {
     if (this.state !== GameState.Playing) return;
 
@@ -149,6 +155,7 @@ class PongGame {
     }
   }
 
+  // Renders the game objects (paddles and ball) on the canvas.
   private renderGame() {
     this.ctx.clearRect(0, 0, this.config.canvasWidth, this.config.canvasHeight);
 
@@ -173,6 +180,7 @@ class PongGame {
     this.ctx.closePath();
   }
 
+  // Starts the game loop, updating and rendering the game at each animation frame.
   public start() {
     const gameLoop = () => {
       this.updateGame();
@@ -210,6 +218,7 @@ const App: React.FC = () => {
     }
   }, []);
 
+  // Handles the start of drawing on the canvas.
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
     setIsDrawing(true);
     const canvas = studioRef.current!;
@@ -218,6 +227,7 @@ const App: React.FC = () => {
     ctx!.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
   };
 
+  // Tracks the drawing as the mouse moves, updating the canvas and storing the current stroke.
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     if (!isDrawing) return;
     const canvas = studioRef.current!;
@@ -227,15 +237,17 @@ const App: React.FC = () => {
     setCurrentStroke(canvas.toDataURL());
   };
 
+  // Handles the end of drawing, saving the current stroke as a new frame.
   const handleMouseUp = () => {
     setIsDrawing(false);
     if (currentStroke) {
       const newFrame = { id: Date.now(), data: currentStroke };
       setAnimationFrames([...animationFrames, newFrame]);
-      setCurrentStroke(null); // Clear the stroke after saving the frame
+      setCurrentStroke(null);
     }
   };
 
+  // Saves the current stroke as a new frame without needing to lift the mouse.
   const saveFrame = () => {
     if (currentStroke) {
       const newFrame = { id: Date.now(), data: currentStroke };
@@ -243,11 +255,13 @@ const App: React.FC = () => {
     }
   };
 
+  // Renders the saved frames as an animation in the preview area.
   const renderPreview = () => {
     setAnimationVisible(true);
     setIsAnimating(true);
   };
 
+  // Closes the animation preview and stops the animation.
   const closeAnimation = () => {
     setAnimationVisible(false);
     setIsAnimating(false);
