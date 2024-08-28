@@ -1,0 +1,10 @@
+{
+    "canvasWidth": 800,
+    "canvasHeight": 600,
+    "paddleWidth": 10,
+    "paddleHeight": 100,
+    "ballRadius": 10,
+    "playerSpeed": 10,
+    "ballSpeed": 4
+  }
+  

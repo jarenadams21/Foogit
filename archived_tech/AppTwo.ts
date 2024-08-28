@@ -1,10 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+const oldApp = `
+import React, { useEffect, useRef, useState } from 'react';
 import './App.css';
-
-interface Frame {
-  id: number;
-  data: string;
-}
 
 interface Keyframe {
   time: number;
@@ -187,14 +183,10 @@ class PongGame {
 const App: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const studioRef = useRef<HTMLCanvasElement>(null);
-  const previewRef = useRef<HTMLCanvasElement>(null);
 
-  const [animationFrames, setAnimationFrames] = useState<Frame[]>([]);
+  const [animationFrames, setAnimationFrames] = useState<string[]>([]);
   const [isDrawing, setIsDrawing] = useState(false);
   const [currentStroke, setCurrentStroke] = useState<string | null>(null);
-  const [animationVisible, setAnimationVisible] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [frameIndex, setFrameIndex] = useState(0);
 
   useEffect(() => {
     const canvas = canvasRef.current!;
@@ -230,53 +222,30 @@ const App: React.FC = () => {
   const handleMouseUp = () => {
     setIsDrawing(false);
     if (currentStroke) {
-      const newFrame = { id: Date.now(), data: currentStroke };
-      setAnimationFrames([...animationFrames, newFrame]);
-      setCurrentStroke(null); // Clear the stroke after saving the frame
+      setAnimationFrames([...animationFrames, currentStroke]);
     }
   };
 
   const saveFrame = () => {
     if (currentStroke) {
-      const newFrame = { id: Date.now(), data: currentStroke };
-      setAnimationFrames([...animationFrames, newFrame]);
+      setAnimationFrames([...animationFrames, currentStroke]);
     }
   };
 
   const renderPreview = () => {
-    setAnimationVisible(true);
-    setIsAnimating(true);
-  };
+    if (studioRef.current) {
+      const ctx = studioRef.current.getContext('2d');
+      ctx!.clearRect(0, 0, studioRef.current.width, studioRef.current.height);
 
-  const closeAnimation = () => {
-    setAnimationVisible(false);
-    setIsAnimating(false);
-    setFrameIndex(0);
-  };
-
-  useEffect(() => {
-    if (isAnimating && animationFrames.length > 0) {
-      const interval = setInterval(() => {
-        setFrameIndex((prevIndex) => (prevIndex + 1) % animationFrames.length);
-      }, 500);
-
-      return () => clearInterval(interval);
-    }
-  }, [isAnimating, animationFrames]);
-
-  useEffect(() => {
-    if (animationVisible && previewRef.current && animationFrames.length > 0) {
-      const ctx = previewRef.current.getContext('2d');
-      if (ctx) {
-        ctx.clearRect(0, 0, previewRef.current.width, previewRef.current.height);
+      animationFrames.forEach((frame, index) => {
         const img = new Image();
-        img.src = animationFrames[frameIndex].data;
+        img.src = frame;
         img.onload = () => {
-          ctx.drawImage(img, 0, 0);
+          ctx!.drawImage(img, 0, 0);
         };
-      }
+      });
     }
-  }, [frameIndex, animationVisible, animationFrames]);
+  };
 
   return (
     <div style={{ display: 'flex' }}>
@@ -295,26 +264,11 @@ const App: React.FC = () => {
         />
         <button onClick={saveFrame}>Save Frame</button>
         <button onClick={renderPreview}>Preview Animation</button>
-        <div className="saved-frames">
-          <button>Saved Frames ▼</button>
-          <div className="frame-list">
-            {animationFrames.map((frame, index) => (
-              <div key={frame.id}>
-                <button onClick={() => setFrameIndex(index)}>Frame {index + 1}</button>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
-
-      {animationVisible && (
-        <div className="animation-sheet">
-          <button onClick={closeAnimation}>Close Animation</button>
-          <canvas ref={previewRef} width={400} height={300} className="preview-canvas" />
-        </div>
-      )}
     </div>
   );
 };
 
 export default App;
+*/
+`

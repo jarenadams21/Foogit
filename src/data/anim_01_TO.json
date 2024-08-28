@@ -1,0 +1,38 @@
+{
+    "version": "1.0",
+    "frameRate": 30,
+    "width": 800,
+    "height": 600,
+    "layers": [
+      {
+        "name": "RectangleLayer",
+        "type": "shape",
+        "shapeType": "rectangle",
+        "fillColor": "#FF0000",
+        "strokeColor": "#000000",
+        "strokeWidth": 2,
+        "opacity": 1,
+        "position": [100, 300],
+        "anchorPoint": [50, 25],
+        "rotation": 0,
+        "scale": [1, 1],
+        "keyframes": [
+          {
+            "property": "position",
+            "frames": [
+              {"time": 0, "value": [100, 300]},
+              {"time": 30, "value": [700, 300]}
+            ]
+          },
+          {
+            "property": "rotation",
+            "frames": [
+              {"time": 0, "value": 0},
+              {"time": 30, "value": 360}
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  
